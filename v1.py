@@ -1,6 +1,6 @@
 import pygame
 import sys
-import primitivas
+from primitivas import * 
 
 #inicialização do pygame
 pygame.init()
@@ -27,6 +27,8 @@ mousePos = (0,0)
 botoesMenu=[]
 primitivas = ['Linha','Retângulo','Quadrado','Círculo','Polilinha','Curva'] # relação numerica de cada primitiva
 primitivaNum = 0; 
+click_on = False
+#menu = pygame.surface.Surface((900,100))
 
 
 def iniciaMenu():
@@ -71,6 +73,9 @@ def iniciaMenu():
 	aux = (width//30)+700
 	pygame.draw.rect(screen,listaCores[colorNum],pygame.Rect((width//30)+700,(width//30),50,50))     # Botao Externo Linha
 	botoesMenu.append((aux,(width//30),(aux+50),(width//30)+50))
+	
+	#screen.set_clip((0,0,0,100))
+	#screen.set_clip((0,100,900,600))
 
 def muda_botao(pos):
 	global primitivaNum
@@ -83,14 +88,13 @@ def muda_botao(pos):
 		
 		if pos[0]>= botoesMenu[i][0] and pos[0]<=botoesMenu[i][2] and pos[1]>=botoesMenu[i][1] and pos[1]<=botoesMenu[i][3]:
 			a=i;
-			primitivaNum = i					
+			if i != 7:
+				primitivaNum = i					
 	
 	if(a==7):
-		print("mudar cor")
 		colorNum+=1
 		if(colorNum == len(listaCores)):
 			colorNum = 0
-
 		aux = (width//30)+700
 		pygame.draw.rect(screen,listaCores[colorNum],pygame.Rect((width//30)+700,(width//30),50,50))     # Botao Externo Linha
 
@@ -101,17 +105,43 @@ def muda_botao(pos):
 				pygame.draw.rect(screen,green,pygame.Rect(aux,(width//30)+50,50,5))
 			else:
 				pygame.draw.rect(screen,MenuColor,pygame.Rect(aux,(width//30)+50,50,5))
-
-
 	pygame.display.update()		
 
+def desenha_linha(pos):
+	deafultBack = screen.copy()
+	while 1:
+		for e in pygame.event.get():
 
+			print("desenhando... ",click_on)
+			x,y = pygame.mouse.get_pos()
+			screen.blit(deafultBack,(0,0))
+			linha(pos[0],pos[1],x,y,listaCores[colorNum])
+		
+			if(e.type == pygame.MOUSEBUTTONUP):
+				print('bbbbbbbbbbbbbb')
+				return
+		
+
+def desenha_retangulo(pos):
+	deafultBack = screen.copy()
+	while 1:
+		for e in pygame.event.get():
+			x,y = pygame.mouse.get_pos()
+			screen.blit(deafultBack,(0,0))
+			retangulo(pos[0],pos[1],x,y,listaCores[colorNum])
+
+			if(e.type == pygame.MOUSEBUTTONUP):
+				print('bbbbbbbbbbbbbb')
+				return
 
 
 def click_handle(pos):
 	if(pos[1] <= 100):
 		muda_botao(pos)
-
+	if(primitivaNum == 0):
+		desenha_linha(pos)
+	if(primitivaNum == 1):
+		desenha_retangulo(pos)
 
 
 iniciaMenu()
@@ -120,13 +150,17 @@ print(botoesMenu)
 
 
 while 1 :
+
 	mousePos = pygame.mouse.get_pos()
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
 
 		if event.type == pygame.MOUSEBUTTONDOWN:
+			click_on = True
 			click_handle(mousePos)
+		
+
 	
 	pygame.display.update()		
 
