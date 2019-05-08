@@ -1,4 +1,5 @@
 import pygame
+import math
 import sys
 from primitivas import * 
 
@@ -118,10 +119,8 @@ def desenha_linha(pos):
 			linha(pos[0],pos[1],x,y,listaCores[colorNum])
 		
 			if(e.type == pygame.MOUSEBUTTONUP):
-				print('bbbbbbbbbbbbbb')
 				return
 		
-
 def desenha_retangulo(pos):
 	deafultBack = screen.copy()
 	while 1:
@@ -131,17 +130,81 @@ def desenha_retangulo(pos):
 			retangulo(pos[0],pos[1],x,y,listaCores[colorNum])
 
 			if(e.type == pygame.MOUSEBUTTONUP):
-				print('bbbbbbbbbbbbbb')
 				return
+
+def desenha_quadrado(pos):
+	deafultBack = screen.copy()
+	while 1:
+		for e in pygame.event.get():
+			x,y = pygame.mouse.get_pos()
+			screen.blit(deafultBack,(0,0))
+
+			##PEDIR PRO JUSTINO ME EXPLICAR ISSO DE SIGNAL E DAS COORDENADAS DE PARAMETRO
+			signal = abs(y - pos[1]) // (y - pos[1]) if y != pos[1] else 1
+			if(x<pos[0]):
+				signal *=-1
+			quadrado(pos[0],pos[1],x,pos[1] + ((x - pos[0]) * signal),listaCores[colorNum])
+
+			if(e.type == pygame.MOUSEBUTTONUP):
+				return
+
+def desenha_circulo(pos):
+	deafultBack = screen.copy()
+	while 1:
+		for e in pygame.event.get():
+			x,y = pygame.mouse.get_pos()
+			screen.blit(deafultBack,(0,0))
+			raio = int( math.sqrt( ((x - pos[0]) ** 2) + ((y - pos[1]) ** 2) ) )
+			#if r > start[0] - (screen_size[0] >> 2):
+			#    r = start[0] - (screen_size[0] >> 2)
+			circulo(pos[0], pos[1], raio, listaCores[colorNum])
+
+			if(e.type == pygame.MOUSEBUTTONUP):
+				return
+
+def desenha_polilinha():
+	while 1:
+		for e in pygame.event.get():
+			if(e.type == pygame.MOUSEBUTTONDOWN):
+				poli_aux(pygame.mouse.get_pos())
+				return
+
+def poli_aux(pos):
+	deafultBack = screen.copy()
+	while 1:
+		for e in pygame.event.get():
+
+			print("desenhando... ",click_on)
+			x,y = pygame.mouse.get_pos()
+			screen.blit(deafultBack,(0,0))
+			linha(pos[0],pos[1],x,y,listaCores[colorNum])
+		
+			if(e.type == pygame.MOUSEBUTTONDOWN):
+				pygame.display.update()
+				deafultBack = screen.copy()	
+				pos=(x,y)
+				aux = pygame.mouse.get_pressed()
+				if aux[2]==1:
+					return
 
 
 def click_handle(pos):
 	if(pos[1] <= 100):
 		muda_botao(pos)
+	elif(primitivaNum == 4):
+		poli_aux(pos)
 	if(primitivaNum == 0):
 		desenha_linha(pos)
 	if(primitivaNum == 1):
 		desenha_retangulo(pos)
+	if(primitivaNum == 2):
+		desenha_quadrado(pos)
+	if(primitivaNum == 3):
+		desenha_circulo(pos)
+	#if(primitivaNum == 5):       FALTA FAZER
+	#	preenche(pos)
+	
+
 
 
 iniciaMenu()

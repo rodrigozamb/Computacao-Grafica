@@ -106,6 +106,12 @@ def retangulo(x, y, w, h, color):
     _segmento(x, h, x, y, color)
     pygame.display.flip()
 
+def quadrado(x, y, w, h, color):
+    _segmento(x, y, w, y, color)
+    _segmento(w, y, w, h, color)
+    _segmento(w, h, x, h, color)
+    _segmento(x, h, x, y, color)
+    pygame.display.flip()
 
 def triangulo(x, y, size, color):
     _segmento(x - size, y + size, x, y - size, color)
