@@ -1,24 +1,13 @@
 import pygame
 
-screen_size = (800, 600)
+size = (900, 600)
+white=[255,255,255]
+black=[0,0,0]
 
-#Cores
-white=(255,255,255)
-black=(0,0,0)
-
-#Variaveis de estilo
-background = white
-foreground = black
 
 pygame.init()
-screen = pygame.display.set_mode(screen_size)
-layer = pygame.surface.Surface(screen_size)
-layer.blit(screen, (0,0)) 
+screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption('Trabalho computacao grafica')
-screen.fill(background)
-layer.fill(white)
-pygame.display.flip()
 
 def _linhaH(x0, y0, x1, y1, color):
     dx = x1 - x0
@@ -54,7 +43,7 @@ def _linhaV(x0, y0, x1, y1, color):
         D = D + 2*dx
 
 
-def _segmento(x0, y0, x1, y1, color):
+def segmento_reta(x0, y0, x1, y1, color):
     if abs(y1 - y0) < abs(x1 - x0):
         if x0 > x1:
             _linhaH(x1, y1, x0, y0, color)
@@ -68,15 +57,16 @@ def _segmento(x0, y0, x1, y1, color):
 
 
 def linha(x0, y0, x1, y1, color):
-    _segmento(x0, y0, x1, y1, color)
+    segmento_reta(x0, y0, x1, y1, color)
     pygame.display.flip()
 
 
 def circulo(x0, y0, r, color):
+    global db
     x = 0
     y = r
     d = 1 - r
-    _circulo (x, y, x0, y0, color)
+    circulo_aux (x, y, x0, y0, color)
     while y > x :
         if d < 0 :
             d = d + ( 2 * x ) + 3
@@ -84,11 +74,11 @@ def circulo(x0, y0, r, color):
             d = d + 2 * ( x - y ) + 5
             y = y - 1
         x = x + 1
-        _circulo(x, y, x0, y0, color)
+        circulo_aux(x, y, x0, y0, color)
     pygame.display.flip()
     
 
-def _circulo(x, y, x0, y0, color):
+def circulo_aux(x, y, x0, y0, color):
     screen.set_at((x + x0, y + y0), color)
     screen.set_at((x0 - y, x + y0), color)
     screen.set_at((x0 - y, y0 - x), color)
@@ -98,23 +88,18 @@ def _circulo(x, y, x0, y0, color):
     screen.set_at((y + x0, y0 - x), color)
     screen.set_at((y + x0, x + y0), color)
 
-
 def retangulo(x, y, w, h, color):
-    _segmento(x, y, w, y, color)
-    _segmento(w, y, w, h, color)
-    _segmento(w, h, x, h, color)
-    _segmento(x, h, x, y, color)
+    segmento_reta(x, y, w, y, color)
+    segmento_reta(w, y, w, h, color)
+    segmento_reta(w, h, x, h, color)
+    segmento_reta(x, h, x, y, color)
     pygame.display.flip()
 
 def quadrado(x, y, w, h, color):
-    _segmento(x, y, w, y, color)
-    _segmento(w, y, w, h, color)
-    _segmento(w, h, x, h, color)
-    _segmento(x, h, x, y, color)
+    segmento_reta(x, y, w, y, color)
+    segmento_reta(w, y, w, h, color)
+    segmento_reta(w, h, x, h, color)
+    segmento_reta(x, h, x, y, color)
     pygame.display.flip()
 
-def triangulo(x, y, size, color):
-    _segmento(x - size, y + size, x, y - size, color)
-    _segmento(x, y - size, x + size,  y + size, color)
-    _segmento(x + size, y + size, x - size, y + size, color)
-    pygame.display.flip()
+
